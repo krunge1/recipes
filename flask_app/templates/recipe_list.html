@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recipes Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body class="max_width_centered">
+    <div>
+        <h1>Welcome, {{user.name}}</h1>
+        <a href="/recipes/new">Create</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <h2>All posted recipes:</h2>
+    <table class="table table-dark table-striped-columns">
+        <tr>
+            <th>Name</th>
+            <th>Under</th>
+            <th>Posted By</th>
+            <th>Actions</th>
+        </tr>
+        <tbody>
+            {%for recipe in recipes%}
+            <tr>
+                <td name="recipe_name">{{recipe.recipe_name}}</td>
+                <td name="under_thirty_minutes">{{recipe.under_thirty_minutes}}</td>
+                <td name="user_id">{{recipe.user_id}}</td>
+                <td name="links">
+                    <a href="/recipes/{{recipe.id}}">View Recipe</a>
+                    {%if recipe.user_id == session.user_id%}
+                    <a href="/recipes/edit/{{recipe.id}}}}">Edit</a>
+                    <a href="/recipes/delete/{{recipe.id}}">Delete</a>
+                    {%endif%}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/dojos">Home</a>
+    <a href="/ninja">Add Ninja</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
