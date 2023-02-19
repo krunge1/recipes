@@ -5,9 +5,9 @@ from flask_bcrypt import Bcrypt
 import re
 bcrypt = Bcrypt(app)
 
-from flask_app.models import user
+from flask_app.models import user, recipe
 
-class Dojo:
+class Recipe:
     db = "recipes_schema"
 
     def __init__(self,data):
@@ -23,9 +23,44 @@ class Dojo:
 
 
 # Create
+    @classmethod
+    def create(cls, data):
+        if not cls.validate_recipe_registration_data(data):
+            return False
+        query = "INSERT INTO recipes (recipe_name, description, instructions, date_cooked, under_thirty_minutes, user_id) VALUES (%(recipe_name)s, %(description)s, %(instructions)s, %(date_cooked)s, %(under_thirty_minutes)s, %(user_id)s);"
+        result = connectToMySQL(cls.db).query_db(query, data)
+        return result
 
+    @staticmethod # VALIDATE user
+    def validate_recipe_registration_data(data): 
+        is_valid = True
+        if len(data['recipe_name'])<3:
+            flash('Recipe name must be at least three characters long.')
+            is_valid = False
+        if len(data['description'])<3:
+            flash('Description must be at least three characters long.')
+            is_valid = False
+        if len(data['instructions'])<3:
+            flash('Instructions must be at least three characters long.')
+            is_valid = False
+        return is_valid
 
 # Read
+    @classmethod
+    def get_one(cls, data):
+        query = """SELECT * from recipes
+        WHERE id = %(id)s
+        ;
+        """
+        result = connectToMySQL(cls.db).query_db(query, data)
+        return cls(result[0])
+    
+    @classmethod
+    def get_all(cls):
+        query = """SELECT * from Recipes
+        ;
+        """
+        result = connectToMySQL(cls.db).query_db(query)
 
 # Update
 

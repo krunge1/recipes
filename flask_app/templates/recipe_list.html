@@ -8,7 +8,7 @@
 </head>
 <body class="max_width_centered">
     <div>
-        <h1>Welcome, {{user.name}}</h1>
+        <h1>Welcome, {{session.first_name}}</h1>
         <a href="/recipes/new">Create</a>
         <a href="/logout">Logout</a>
     </div>
@@ -28,7 +28,7 @@
                 <td name="user_id">{{recipe.user_id}}</td>
                 <td name="links">
                     <a href="/recipes/{{recipe.id}}">View Recipe</a>
-                    {%if recipe.user_id == session.user_id%}
+                    {%if recipe.user_id == session.id%}
                     <a href="/recipes/edit/{{recipe.id}}}}">Edit</a>
                     <a href="/recipes/delete/{{recipe.id}}">Delete</a>
                     {%endif%}
