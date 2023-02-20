@@ -20,6 +20,7 @@ class Recipe:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.user_id = data['user_id']
+        self.posted = None
 
 
 # Create
@@ -56,66 +57,68 @@ class Recipe:
         return cls(result[0])
     
     @classmethod
-    def get_all(cls):
-        query = """SELECT * from Recipes
+    def get_all(cls, data):
+        query = """SELECT * from recipes 
+        LEFT JOIN users on recipes.user_id = users.id
         ;
         """
-        result = connectToMySQL(cls.db).query_db(query)
+        result = connectToMySQL(cls.db).query_db(query, data)
+        if not result: 
+            return False
+        row = result[0]
+        this_recipe = cls(result)
+        user_data = {
+            "id": row['users.id'],
+            "first_name": row['first_name'],
+            "last_name": row['last_name'],
+            "email": row['email'],
+            "password": row['password'],
+            "created_at": row['users.created_at'],
+            "updated_at": row['users.updated_at'],
+        }
+        this_recipe.posted = user.User(user_data)
+        return this_recipe
+
+    @classmethod
+    def get_one(cls):
+        query = """SELECT * from recipes 
+        LEFT JOIN users on recipes.user_id = users.id
+        WHERE id = %(id)s
+        ;
+        """
+        results = connectToMySQL(cls.db).query_db(query)
+        print(results)
+        all_recipes = []
+        for row in results:
+            this_recipe = cls(row)
+            user_data = {
+                "id": row['users.id'],
+                "first_name": row['first_name'],
+                "last_name": row['last_name'],
+                "email": row['email'],
+                "password": row['password'],
+                "created_at": row['users.created_at'],
+                "updated_at": row['users.updated_at'],
+            }
+            chef = user.User(user_data)
+            this_recipe.posted = chef
+            all_recipes.append(this_recipe)
+            print(this_recipe.posted.first_name)
+        return all_recipes
 
 # Update
-
+    @classmethod
+    def update_recipe(cls, data):
+        if not cls.validate_recipe_registration_data(data):
+            return False
+        query = "UPDATE recipes SET recipe_name=%(recipe_name)s, description=%(description)s, instructions=%(instructions)s, date_cooked=%(date_cooked)s, under_thirty_minutes=%(under_thirty_minutes)s, user_id=%(user_id)s WHERE id=%(id)s;"
+        result = connectToMySQL(cls.db).query_db(query, data)
+        return result
 
 # Delete
+    @classmethod
+    def delete(cls, data):
+        query = "DELETE FROM recipes WHERE id=%(id)s;"
+        result = connectToMySQL(cls.db).query_db(query, data)
+        return result
 
-#     @classmethod
-#     def getAll(cls):
-#         query = "SELECT * FROM dojos"
-#         results = connectToMySQL(cls.db).query_db(query)
-#         all_dojos = []
-#         for row in results:
-#             all_dojos.append(cls(row))
-#         return all_dojos
-
-
-#     @classmethod
-#     def getOne (cls, data):
-#         query = "SELECT * From ninjas LEFT JOIN dojos on ninjas.dojo_id = dojos. id WHERE dojos.id = %(id)s"
-#         results = connectToMySQL(cls.db).query_db(query, data)
-#         if results:
-#             # print(results)
-#             this_dojo = cls(results[0])
-#             for row in results:
-#                 this_dojo.ninjas.append(ninja.Ninja(row))
-#             return this_dojo
-#         return False
-
-#     @classmethod
-#     def read(cls, data):
-#         query = """SELECT * from dojos
-#         WHERE id = %(id)s
-#         ;
-#         """
-#         result = connectToMySQL(cls.db).query_db(query, data)
-#         return cls(result[0])
-
-#     @classmethod
-#     def create(cls, data):
-#         query = "INSERT INTO dojos (name) VALUES (%(name)s);"
-#         result = connectToMySQL(cls.db).query_db(query, data)
-#         return result
-
-
-    # @classmethod
-    # def update(cls, data):
-    #     query = "UPDATE users SET first_name=%(first_name)s, last_name=%(last_name)s, age=%(age)s WHERE id=%(id)s;"
-    #     result = connectToMySQL(cls.db).query_db(query, data)
-    #     return result
-
-    # @classmethod
-    # def delete(cls, data):
-    #     query = "DELETE FROM users WHERE id=%(id)s;"
-    #     result = connectToMySQL(cls.db).query_db(query, data)
-    #     return result
-
-#establish the Class
-#all SQL entry activity here

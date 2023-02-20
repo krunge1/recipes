@@ -25,11 +25,11 @@
             <tr>
                 <td name="recipe_name">{{recipe.recipe_name}}</td>
                 <td name="under_thirty_minutes">{{recipe.under_thirty_minutes}}</td>
-                <td name="user_id">{{recipe.user_id}}</td>
+                <td>{{recipe.posted.first_name}}</td>
                 <td name="links">
                     <a href="/recipes/{{recipe.id}}">View Recipe</a>
                     {%if recipe.user_id == session.id%}
-                    <a href="/recipes/edit/{{recipe.id}}}}">Edit</a>
+                    <a href="/recipes/edit/{{recipe.id}}">Edit</a>
                     <a href="/recipes/delete/{{recipe.id}}">Delete</a>
                     {%endif%}
                 </td>
