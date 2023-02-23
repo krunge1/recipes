@@ -20,7 +20,7 @@ def show_all_recipes():
     return render_template('recipe_list.html', recipes=recipe.Recipe.get_all())
 
 @app.route('/recipes/<int:id>')
-def show_all_recipes(id):
+def show_one_recipes(id):
     return render_template('view_recipe.html', recipes=recipe.Recipe.get_one({'id': id}))
 
 # Update
@@ -32,6 +32,8 @@ def show_edit_recipes(id):
 def edit_recipes(id):
     print(id)
     print(session['id'])
+    if not recipe.Recipe.validate_recipe_registration_data(request.form):
+        return redirect(f"/recipes/edit/{id}")
     data={
         "recipe_name": request.form['recipe_name'],
         "description": request.form['description'],
@@ -41,8 +43,7 @@ def edit_recipes(id):
         "user_id": session['id'],
         "id": id,
     }
-    if recipe.Recipe.update_recipe(data):
-        return redirect(f"/recipes/edit/{data['id']}")
+    recipe.Recipe.update_recipe(data)
     return redirect('/recipes')
 
 # Delete

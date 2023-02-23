@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Recipes Summary</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="max_width_centered">
-    <div>
-        <h1>Welcome, {{session.first_name}}</h1>
-        <a href="/recipes/new">Create</a>
-        <a href="/logout">Logout</a>
+    <div class="header">
+        <h1>Welcome, {{session.first_name}}!</h1>
+        <div class="header_line_group">
+            <a href="/recipes/new">Create</a>
+            <a href="/logout">Logout</a>
+        </div>
     </div>
     <h2>All posted recipes:</h2>
     <table class="table table-dark table-striped-columns">
@@ -37,9 +40,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <a href="/dojos">Home</a>
-    <a href="/ninja">Add Ninja</a>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

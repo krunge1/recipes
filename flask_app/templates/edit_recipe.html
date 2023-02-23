@@ -8,10 +8,12 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div>
-        <h1>Add a New Recipe!</h1>
-        <a href="/recipes">Back to Recipes</a>
-        <a href="/logout">Logout</a>
+    <div class="header">
+        <h1>Welcome, {{session.first_name}}!</h1>
+        <div class="header_line_group">
+            <a href="/recipes">Back to Recipes</a>
+            <a href="/logout">Logout</a>
+        </div>
     </div>
     <div>
         {% with messages = get_flashed_messages() %}

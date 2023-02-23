@@ -57,37 +57,14 @@ class Recipe:
         return cls(result[0])
     
     @classmethod
-    def get_all(cls, data):
+    def get_all(cls):
         query = """SELECT * from recipes 
         LEFT JOIN users on recipes.user_id = users.id
-        ;
-        """
-        result = connectToMySQL(cls.db).query_db(query, data)
-        if not result: 
-            return False
-        row = result[0]
-        this_recipe = cls(result)
-        user_data = {
-            "id": row['users.id'],
-            "first_name": row['first_name'],
-            "last_name": row['last_name'],
-            "email": row['email'],
-            "password": row['password'],
-            "created_at": row['users.created_at'],
-            "updated_at": row['users.updated_at'],
-        }
-        this_recipe.posted = user.User(user_data)
-        return this_recipe
-
-    @classmethod
-    def get_one(cls):
-        query = """SELECT * from recipes 
-        LEFT JOIN users on recipes.user_id = users.id
-        WHERE id = %(id)s
         ;
         """
         results = connectToMySQL(cls.db).query_db(query)
-        print(results)
+        if not results: 
+            return False
         all_recipes = []
         for row in results:
             this_recipe = cls(row)
@@ -103,8 +80,33 @@ class Recipe:
             chef = user.User(user_data)
             this_recipe.posted = chef
             all_recipes.append(this_recipe)
-            print(this_recipe.posted.first_name)
+        # print(row)
+        # print(this_recipe.posted.first_name)
         return all_recipes
+
+    @classmethod
+    def get_one(cls, data):
+        query = """SELECT * from recipes 
+        LEFT JOIN users on recipes.user_id = users.id
+        WHERE recipes.id = %(id)s
+        ;
+        """
+        results = connectToMySQL(cls.db).query_db(query, data)
+        if not results:
+            return False    
+        row = results[0]
+        this_recipe = cls(row)
+        user_data = {
+            "id": row['users.id'],
+            "first_name": row['first_name'],
+            "last_name": row['last_name'],
+            "email": row['email'],
+            "password": row['password'],
+            "created_at": row['users.created_at'],
+            "updated_at": row['users.updated_at'],
+            }
+        this_recipe.posted = user.User(user_data)
+        return this_recipe
 
 # Update
     @classmethod
