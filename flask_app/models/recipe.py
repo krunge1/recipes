@@ -64,7 +64,7 @@ class Recipe:
         """
         results = connectToMySQL(cls.db).query_db(query)
         if not results: 
-            return False
+            return []
         all_recipes = []
         for row in results:
             this_recipe = cls(row)
@@ -93,7 +93,7 @@ class Recipe:
         """
         results = connectToMySQL(cls.db).query_db(query, data)
         if not results:
-            return False    
+            return []    
         row = results[0]
         this_recipe = cls(row)
         user_data = {
