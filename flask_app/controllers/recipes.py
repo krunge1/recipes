@@ -55,7 +55,5 @@ def delete_recipe(id):
     recipe.Recipe.delete(data)
     return redirect('/recipes')
 
-# @app.route('/dojos')
-# def dojos():
-#     return render_template("dojo_summary.html", dojos = dojo.Dojo.getAll())
+
 
